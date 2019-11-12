@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-liveness-pod
+spec:
+  containers:
+  - name: myapp-container
+    image: busybox
+    command: ['sh', '-c', "echo Hello, K8s! && sleep 3600"]
+    env:
+    - name: DB_HOST
+      valueFrom:
+        secretKeyRef:
+          name: mysecret
+          key: DB_HOST
+    - name: DB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: mysecret
+          key: DB_PASSWORD
+    livenessProbe:
+      exec:
+        command:
+          - echo
+          - testing
+      initialDelaySeconds: 5
+      periodSeconds: 5
